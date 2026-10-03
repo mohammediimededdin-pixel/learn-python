@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python: Zero to Professional — Interactive Course</title>
+<style>
+  :root{
+    --bg: #f6f6fb;
+    --surface: #ffffff;
+    --surface-2: #f0eefc;
+    --text: #1e2130;
+    --text-muted: #585e72;
+    --primary: #4f46e5;
+    --primary-dark: #3730a3;
+    --accent: #0d9488;
+    --accent-amber: #b45309;
+    --danger: #b91c1c;
+    --success: #15803d;
+    --border: #e1dff2;
+    --code-bg: #1e1b2e;
+    --code-text: #eceaf7;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 10px 30px rgba(31,33,64,0.09);
+    --focus: #0d9488;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *, *::before, *::after{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+
+  body{
+    margin:0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .skip-link{
+    position:absolute; left:-9999px; top:0; background:var(--primary); color:#fff;
+    padding:0.75rem 1.25rem; z-index:1000; border-radius: 0 0 var(--radius-sm) 0;
+  }
+  .skip-link:focus{ left:0; }
+
+  a, button, input, label{ font-family: inherit; }
+
+  :focus-visible{
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* ---------- Header ---------- */
+  .site-header{
+    background: linear-gradient(120deg, var(--primary) 0%, #6d28d9 55%, var(--accent) 100%);
+    color: #fff;
+    padding: 1.25rem 1.5rem 0;
+  }
+  .header-inner{
+    max-width: 1200px; margin: 0 auto;
+    display:flex; flex-wrap:wrap; gap:1.25rem; align-items:center; justify-content:space-between;
+    padding-bottom: 1.25rem;
+  }
+  .brand{ display:flex; align-items:center; gap:0.75rem; }
+  .brand-mark{ font-size:2.1rem; line-height:1; }
+  .brand-title{ margin:0; font-weight:800; font-size:1.3rem; letter-spacing:-0.01em; }
+  .brand-sub{ margin:0.1rem 0 0; font-size:0.92rem; opacity:0.92; }
+
+  .header-controls{ display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; }
+  .search-wrap{ display:flex; flex-direction:column; gap:0.25rem; }
+  .search-wrap label{ font-size:0.78rem; font-weight:600; opacity:0.95; }
+  .search-wrap input[type="search"]{
+    padding:0.6rem 0.85rem; border-radius: 999px; border:1px solid rgba(255,255,255,0.5);
+    min-width: 230px; font-size:0.95rem; background: rgba(255,255,255,0.95); color: var(--text);
+  }
+  .search-wrap input[type="search"]::placeholder{ color:#6b7084; }
+
+  .nav-toggle{
+    display:none; align-items:center; gap:0.4rem;
+    background: rgba(255,255,255,0.18); color:#fff; border:1px solid rgba(255,255,255,0.55);
+    padding:0.6rem 1rem; border-radius: 999px; cursor:pointer; font-weight:600;
+  }
+  .nav-toggle:hover{ background: rgba(255,255,255,0.3); }
+
+  .progress-strip{
+    max-width:1200px; margin:0 auto; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+    padding-bottom: 1rem;
+  }
+  .progress-track{
+    flex:1 1 220px; height:12px; background: rgba(255,255,255,0.3); border-radius:999px; overflow:hidden; min-width:160px;
+  }
+  .progress-fill{
+    height:100%; width:0%; background: #fff; border-radius:999px;
+    transition: width 0.3s ease;
+  }
+  .progress-label{ margin:0; font-size:0.9rem; font-weight:600; white-space:nowrap; }
+  .btn-ghost{
+    background: transparent; border:1.5px solid rgba(255,255,255,0.7); color:#fff;
+    padding:0.5rem 0.9rem; border-radius:999px; cursor:pointer; font-weight:600; font-size:0.85rem;
+  }
+  .btn-ghost:hover{ background: rgba(255,255,255,0.18); }
+
+  /* ---------- Layout ---------- */
+  .layout{
+    max-width: 1200px; margin: 0 auto; padding: 1.75rem 1.5rem 3rem;
+    display:grid; grid-template-columns: 290px 1fr; gap: 1.75rem; align-items:start;
+  }
+
+  .course-nav{
+    background: var(--surface); border:1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 1rem; box-shadow: var(--shadow); position: sticky; top: 1rem; max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+  .overview-btn{
+    width:100%; text-align:left; padding:0.75rem 0.9rem; border-radius: var(--radius-md);
+    border: 1.5px solid var(--border); background: var(--surface-2); color: var(--text);
+    font-weight:700; cursor:pointer; margin-bottom:0.85rem; font-size:0.95rem;
+  }
+  .overview-btn:hover{ border-color: var(--primary); }
+  .overview-btn.active{ background: var(--primary); color:#fff; border-color: var(--primary); }
+
+  .nav-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.4rem; }
+  .nav-item-btn{
+    width:100%; text-align:left; background: transparent; border: 1.5px solid transparent;
+    border-radius: var(--radius-md); padding:0.55rem 0.7rem; cursor:pointer; color: var(--text);
+    display:flex; align-items:flex-start; gap:0.5rem; font-size:0.9rem;
+  }
+  .nav-item-btn:hover{ background: var(--surface-2); }
+  .nav-item-btn.active{ background: var(--surface-2); border-color: var(--primary); font-weight:700; }
+  .nav-num{ flex: 0 0 auto; font-weight:700; color: var(--primary); min-width:1.4rem; }
+  .nav-text{ display:flex; flex-direction:column; gap:0.15rem; }
+  .nav-badge{ font-size:0.72rem; text-transform:uppercase; letter-spacing:0.03em; color: var(--text-muted); font-weight:600; }
+  .nav-check{ margin-left:auto; color: var(--success); font-weight:800; flex:0 0 auto; }
+  .nav-empty{ color: var(--text-muted); padding: 0.5rem; font-size:0.9rem; }
+
+  .main-content{
+    background: var(--surface); border:1px solid var(--border); border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 3vw, 2.5rem); box-shadow: var(--shadow); min-height: 60vh;
+  }
+
+  /* ---------- Content elements ---------- */
+  .lesson-badge{
+    display:inline-block; background: var(--surface-2); color: var(--primary-dark);
+    font-weight:700; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.04em;
+    padding:0.3rem 0.75rem; border-radius:999px; margin-bottom:0.75rem;
+  }
+  .lesson-title{ margin:0 0 1rem; font-size: clamp(1.4rem, 2.6vw, 2rem); letter-spacing:-0.015em; }
+  .lesson-section{ margin: 1.75rem 0; }
+  .lesson-section h3{ font-size:1.1rem; margin-bottom:0.6rem; color: var(--primary-dark); }
+  .lesson-section p{ margin:0.4rem 0; color: var(--text); }
+  .lesson-section ul{ margin:0.4rem 0; padding-left:1.4rem; }
+  .lesson-section li{ margin:0.3rem 0; }
+
+  .code-block{ border-radius: var(--radius-md); overflow:hidden; border:1px solid #2d2a45; }
+  .code-toolbar{
+    display:flex; align-items:center; justify-content:space-between; background:#171427; color:#cfcbe8;
+    padding:0.5rem 0.9rem; font-size:0.78rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
+  }
+  .copy-btn{
+    background: var(--accent); color:#fff; border:none; padding:0.35rem 0.8rem; border-radius:999px;
+    cursor:pointer; font-size:0.78rem; font-weight:700;
+  }
+  .copy-btn:hover{ background:#0b7a70; }
+  pre{ margin:0; }
+  pre code{
+    display:block; background: var(--code-bg); color: var(--code-text); padding:1rem 1.1rem;
+    overflow-x:auto; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:0.88rem; line-height:1.55; white-space:pre;
+  }
+  .copy-status{ margin:0; padding:0.3rem 0.9rem; background:#171427; color:#9ef0c8; font-size:0.78rem; min-height:1.2em; }
+
+  .output-pre{
+    background: #fbfaf6; border:1px dashed #c9bd8f; border-radius: var(--radius-md);
+    padding:0.9rem 1.1rem; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size:0.86rem; white-space: pre-wrap; color:#4a3f1c;
+  }
+
+  .callout{ border-radius: var(--radius-md); padding:1rem 1.1rem; display:flex; gap:0.7rem; border:1.5px solid var(--border); }
+  .callout-icon{ font-size:1.2rem; flex:0 0 auto; }
+  .callout-mistake{ background:#fef2f2; border-color:#f3c6c6; }
+  .callout-practice{ background:#eef9f5; border-color:#bfe8d8; }
+  .callout h4{ margin:0 0 0.3rem; font-size:0.95rem; }
+  .callout p{ margin:0; }
+
+  .quiz{ background: var(--surface-2); border-radius: var(--radius-md); padding:1.1rem 1.2rem; border:1.5px solid var(--border); }
+  .quiz h3{ margin-top:0; }
+  .quiz-option{ display:flex; align-items:flex-start; gap:0.55rem; margin:0.5rem 0; }
+  .quiz-option input{ margin-top:0.3rem; }
+  .quiz-option label{ cursor:pointer; }
+  .quiz-actions{ display:flex; gap:0.6rem; margin-top:0.8rem; flex-wrap:wrap; }
+  .btn-primary{
+    background: var(--primary); color:#fff; border:none; padding:0.6rem 1.1rem; border-radius:999px;
+    cursor:pointer; font-weight:700; font-size:0.9rem;
+  }
+  .btn-primary:hover{ background: var(--primary-dark); }
+  .btn-secondary{
+    background: #fff; color: var(--primary-dark); border:1.5px solid var(--primary); padding:0.55rem 1.05rem;
+    border-radius:999px; cursor:pointer; font-weight:700; font-size:0.9rem;
+  }
+  .quiz-feedback{ margin-top:0.8rem; font-weight:700; padding:0.6rem 0.8rem; border-radius: var(--radius-sm); display:none; }
+  .quiz-feedback.show{ display:block; }
+  .quiz-feedback.correct{ background:#e6f7ec; color: var(--success); border:1.5px solid #9edab3; }
+  .quiz-feedback.incorrect{ background:#fdecec; color: var(--danger); border:1.5px solid #f2b6b6; }
+  .quiz-feedback .fb-explain{ display:block; font-weight:500; color: var(--text); margin-top:0.35rem; }
+
+  .complete-row{
+    display:flex; align-items:center; gap:0.6rem; background: var(--surface-2); border-radius: var(--radius-md);
+    padding:0.85rem 1rem; margin: 1.5rem 0; border:1.5px solid var(--border);
+  }
+  .complete-row input{ width:1.2rem; height:1.2rem; }
+  .complete-row label{ font-weight:700; cursor:pointer; }
+
+  .lesson-nav{ display:flex; justify-content:space-between; gap:1rem; margin-top:2rem; flex-wrap:wrap; }
+  .lesson-nav button{
+    flex:1 1 220px; text-align:left; background: var(--surface-2); border:1.5px solid var(--border);
+    border-radius: var(--radius-md); padding:0.8rem 1rem; cursor:pointer; font-weight:600; color: var(--text);
+  }
+  .lesson-nav button:disabled{ opacity:0.5; cursor:not-allowed; }
+  .lesson-nav button:not(:disabled):hover{ border-color: var(--primary); }
+  .lesson-nav .next-btn{ text-align:right; }
+
+  /* Overview page */
+  .overview-intro p{ max-width: 70ch; }
+  .how-it-works{ background: var(--surface-2); border-radius: var(--radius-md); padding:1.2rem 1.4rem; margin:1.2rem 0; }
+  .path-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:0.6rem; }
+  .path-item{
+    display:flex; align-items:center; gap:0.8rem; background: var(--surface-2); border-radius: var(--radius-md);
+    border:1.5px solid var(--border); padding:0.7rem 0.9rem;
+  }
+  .path-item button{
+    background:none; border:none; text-align:left; cursor:pointer; color: var(--text); font-weight:700; flex:1;
+    font-size:0.95rem;
+  }
+  .path-item button:hover{ color: var(--primary-dark); text-decoration: underline; }
+  .path-num{ background: var(--primary); color:#fff; border-radius:50%; width:1.8rem; height:1.8rem;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.85rem; flex:0 0 auto; }
+  .start-btn{ margin-top:1.3rem; }
+
+  .site-footer{ text-align:center; color: var(--text-muted); padding:2rem 1rem 3rem; font-size:0.9rem; }
+
+  @media (max-width: 900px){
+    .layout{ grid-template-columns: 1fr; }
+    .nav-toggle{ display:inline-flex; }
+    .course-nav{ position:static; display:none; max-height:none; }
+    .course-nav.open{ display:block; }
+  }
+  @media (max-width: 520px){
+    .search-wrap input[type="search"]{ min-width: 0; width:100%; }
+    .header-controls{ width:100%; }
+    .progress-strip{ flex-direction:column; align-items:stretch; }
+  }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">🐍</span>
+      <div>
+        <p class="brand-title">Python: Zero to Professional</p>
+        <p class="brand-sub">An interactive, self-paced course — fundamentals to professional practice</p>
+      </div>
+    </div>
+    <div class="header-controls">
+      <div class="search-wrap">
+        <label for="lesson-search">Search lessons</label>
+        <input type="search" id="lesson-search" placeholder="Try “loops”, “dictionaries”, “async”…" autocomplete="off">
+      </div>
+      <button id="nav-toggle" class="nav-toggle" type="button" aria-expanded="false" aria-controls="course-nav">
+        <span aria-hidden="true">☰</span> Menu
+      </button>
+    </div>
+  </div>
+  <div class="progress-strip">
+    <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Course completion progress" id="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <p id="progress-label" class="progress-label">0 of 19 steps complete (0%)</p>
+    <button id="reset-progress" class="btn-ghost" type="button">Reset progress</button>
+  </div>
+</header>
+
+<div class="layout">
+  <nav id="course-nav" class="course-nav" aria-label="Course lessons and projects">
+    <button class="overview-btn" id="overview-btn" type="button">📘 Course Overview &amp; Learning Path</button>
+    <ol id="nav-list" class="nav-list"></ol>
+    <p id="nav-empty" class="nav-empty" hidden>No lessons match your search. Try a different keyword, like “functions” or “files”.</p>
+  </nav>
+
+  <main id="main-content" class="main-content" tabindex="-1" aria-live="polite">
+  </main>
+</div>
+
+<footer class="site-footer">
+  <p>Built for self-study. Practice consistently, build real projects, read other people's code, and don't be afraid of error messages — they're part of the job. Happy coding! 🐍</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var STORAGE_KEY = "py_course_progress_v1";
+
+  /* ============================================================
+     COURSE DATA
+     ============================================================ */
+  var COURSE = [
+    {
+      id: "s1", type: "lesson", badge: "Stage 1 of 15",
+      title: "What Python Is, and How Code Runs",
+      topics: "python interpreter repl install setup editor idle how code runs getting started",
+      summary: [
+        "Python is a high-level, general-purpose programming language. \u201cHigh-level\u201d means it reads much closer to plain English than the raw instructions a computer's processor executes, and \u201cgeneral-purpose\u201d means you can use it for almost anything: websites, data analysis, automation, games, and more.",
+        "When you run a Python file, a program called the interpreter reads your code line by line, translates it into instructions the computer understands, and carries them out immediately. This differs from languages like C, where code is fully compiled into a standalone program before it ever runs.",
+        "There are two common ways to write and run Python: the REPL (Read-Eval-Print Loop), an interactive prompt where you type one line at a time and see results instantly, and script files (.py), where you write a full program and run the whole file at once. A code editor (such as VS Code or PyCharm) makes writing script files far easier with syntax highlighting and error hints.",
+        "To get started, install Python 3.12 or later from the official python.org downloads page, then confirm the installation in a terminal with `python --version` (or `python3 --version` on macOS/Linux)."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Explain, in your own words, what an interpreter does.",
+        "Describe the difference between the REPL and running a script file.",
+        "Install Python 3.12+ on your computer.",
+        "Run a one-line command in the REPL and a short program saved in a .py file."
+      ],
+      code: "# save this as hello.py and run it with: python hello.py\nprint(\"Hello, World!\")        # print() displays text on the screen\nprint(\"Welcome to Python.\")   # each print() call starts on a new line",
+      output: "Hello, World!\nWelcome to Python.",
+      mistake: "New learners sometimes type code into a word processor (like Word) instead of a plain-text editor. Word processors add hidden formatting that breaks Python code. Always use a code editor or plain-text editor for .py files.",
+      practice: "Install Python, then open a terminal and launch the REPL by typing `python` (or `python3`). At the `>>>` prompt, type `print(\"My name is ___\")` with your name filled in, press Enter, and read the output. Then type `exit()` to leave.",
+      quiz: {
+        question: "What does the Python interpreter do when you run a script?",
+        options: [
+          "It reads and executes your code line by line immediately.",
+          "It converts Python into a Word document.",
+          "It only checks your code for spelling errors.",
+          "It permanently compiles your code into a .exe file."
+        ],
+        correct: 0,
+        explanation: "The interpreter reads your source code and executes it line by line as the program runs, rather than compiling the whole program into machine code ahead of time."
+      }
+    },
+    {
+      id: "s2", type: "lesson", badge: "Stage 2 of 15",
+      title: "print(), Comments, Variables, and Types",
+      topics: "print comments syntax variables naming conventions types int float str bool type conversion casting",
+      summary: [
+        "Every Python program is built from simple statements. print() is a function that displays information on the screen — you'll use it constantly, especially while learning.",
+        "Comments start with a # symbol. Python ignores everything after # on that line; comments exist purely to explain code to humans.",
+        "A variable is a name that points to a value stored in memory. You create one by assigning a value with =, like `age = 30`. Good variable names are lowercase, use underscores between words (snake_case), and describe what they hold.",
+        "Every value has a type. The core built-in types you'll meet immediately are `int` (whole numbers), `float` (decimals), `str` (text), and `bool` (True/False). Check a value's type with `type()`, and convert between types with `int()`, `float()`, `str()`, `bool()` — this is called type conversion or casting."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Use print() to display text and values.",
+        "Write comments that explain code without affecting it.",
+        "Create variables using clear, conventional names.",
+        "Identify a value's type with type() and convert between types."
+      ],
+      code: "# A comment: this program stores and displays basic profile info\nname = \"Ava\"            # str (text)\nage = 29                # int (whole number)\nheight_m = 1.68         # float (decimal number)\nis_student = False      # bool (True or False)\n\nprint(name, age, height_m, is_student)\nprint(type(age))        # check the type of a value\n\nage_text = str(age)     # convert int -> str\npi_like = int(\"3\")      # convert str -> int (must look like a number!)\nprint(\"I am \" + age_text + \" years old.\")",
+      output: "Ava 29 1.68 False\n<class 'int'>\nI am 29 years old.",
+      mistake: "Trying to join text and numbers with + without converting first — `\"Age: \" + 29` raises a TypeError because you cannot add a string and an int directly. Convert the number with str() first, or use an f-string (next lesson).",
+      practice: "Create variables for a favorite movie's title (str), release year (int), and personal rating out of 10 (float). Print them all on one line, then print the type of each variable.",
+      quiz: {
+        question: "Which variable name follows Python naming conventions best?",
+        options: ["TotalScore", "total_score", "totalscore123!", "2ndPlace"],
+        correct: 1,
+        explanation: "Python convention (PEP 8) favors lowercase snake_case for variable names. Names can't start with a digit or contain symbols like !."
+      }
+    },
+    {
+      id: "s3", type: "lesson", badge: "Stage 3 of 15",
+      title: "Strings, Numbers, Operators, and Boolean Logic",
+      topics: "strings f-strings formatting numbers operators arithmetic comparison boolean and or not slicing indexing",
+      summary: [
+        "Strings support rich operations: slicing out characters, combining with +, repeating with *, and — most usefully — formatting with f-strings, where you write `f\"...\"` and place expressions inside curly braces to insert their values.",
+        "Python's arithmetic operators are + - * / (true division, always a float), // (floor division), % (remainder, or \u2018modulo\u2019), and ** (exponent).",
+        "Comparison operators (== != < > <= >=) compare two values and produce a bool. Boolean logic combines True/False values using `and`, `or`, and `not`.",
+        "A frequent beginner trap: `=` assigns a value, while `==` checks equality. Mixing them up is one of the most common early bugs."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Build formatted strings with f-strings.",
+        "Use indexing and slicing to extract parts of a string.",
+        "Apply arithmetic operators correctly, including // and %.",
+        "Combine conditions using and / or / not."
+      ],
+      code: "price = 19.99\nquantity = 3\ntotal = price * quantity\nprint(f\"Total: ${total:.2f}\")      # f-string with 2 decimal places\n\nname = \"python\"\nprint(name.upper())                # PYTHON\nprint(name[0])                     # p  (first character, index 0)\nprint(name[-1])                    # n  (last character)\nprint(name[0:3])                   # pyt (slice: start up to, not including, 3)\n\na, b = 7, 2\nprint(a // b, a % b, a ** b)       # 3 1 49\n\nis_adult = True\nhas_ticket = False\nprint(is_adult and has_ticket)     # False\nprint(is_adult or has_ticket)      # True\nprint(not has_ticket)              # True",
+      output: "Total: $59.97\nPYTHON\np\nn\npyt\n3 1 49\nFalse\nTrue\nTrue",
+      mistake: "Confusing / and //: `7 / 2` is `3.5` (float division) but `7 // 2` is `3` (floor division). Also confusing = (assignment) with == (equality test).",
+      practice: "Write a program with variables for a rectangle's width and height. Calculate and print its area and perimeter using an f-string with a descriptive label for each value.",
+      quiz: {
+        question: "What does `17 % 5` evaluate to?",
+        options: ["3.4", "2", "3", "12"],
+        correct: 1,
+        explanation: "% is the modulo operator — it returns the remainder after division. 17 divided by 5 is 3 remainder 2."
+      }
+    },
+    {
+      id: "s4", type: "lesson", badge: "Stage 4 of 15",
+      title: "Conditionals and Loops",
+      topics: "if elif else for while loop break continue range control flow patterns conditionals",
+      summary: [
+        "Conditional statements let a program choose different actions depending on a condition. Python uses `if`, `elif` (\u2018else if\u2019), and `else`, and relies on indentation (not braces) to mark which lines belong to each branch.",
+        "Loops repeat code. A `for` loop iterates over a sequence (like `range(5)` or a string); a `while` loop repeats as long as a condition stays True. `break` exits a loop immediately; `continue` skips to the next iteration.",
+        "Common loop patterns include: accumulating a total, counting items that meet a condition, searching until something is found, and using a sentinel value to stop input."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Write multi-branch if/elif/else logic.",
+        "Choose between for and while loops appropriately.",
+        "Use break and continue correctly.",
+        "Recognize the accumulator loop pattern."
+      ],
+      code: "score = 72\n\nif score >= 90:\n    grade = \"A\"\nelif score >= 80:\n    grade = \"B\"\nelif score >= 70:\n    grade = \"C\"\nelse:\n    grade = \"F\"\nprint(f\"Grade: {grade}\")           # Grade: C\n\ntotal = 0\nfor n in range(1, 6):              # 1, 2, 3, 4, 5 (stops before 6)\n    total += n                     # same as total = total + n\nprint(f\"Sum 1-5: {total}\")         # Sum 1-5: 15\n\ncount = 0\nwhile count < 3:\n    print(\"Counting:\", count)\n    count += 1                     # without this, the loop never ends!\n\nfor n in range(10):\n    if n == 3:\n        continue                   # skip printing 3\n    if n == 6:\n        break                      # stop the loop entirely\n    print(n, end=\" \")",
+      output: "Grade: C\nSum 1-5: 15\nCounting: 0\nCounting: 1\nCounting: 2\n0 1 2 4 5",
+      mistake: "Writing `range(1, 5)` expecting 5 to be included — range's stop value is exclusive, so this only gives 1, 2, 3, 4. Also, forgetting to update the loop variable in a while loop creates an infinite loop.",
+      practice: "Write a program that loops through numbers 1 to 20. Print 'Fizz' for multiples of 3, 'Buzz' for multiples of 5, 'FizzBuzz' for multiples of both, and the number otherwise.",
+      quiz: {
+        question: "In a while loop, what is most likely to cause an infinite loop?",
+        options: [
+          "Using break inside the loop",
+          "Forgetting to update the variable the condition depends on",
+          "Using a for loop instead",
+          "Adding a comment inside the loop"
+        ],
+        correct: 1,
+        explanation: "A while loop keeps running as long as its condition is True. If nothing inside the loop ever changes that condition, it never becomes False."
+      }
+    },
+    {
+      id: "m1", type: "project", badge: "Milestone Project 1",
+      title: "Number Guessing Game",
+      topics: "milestone project guessing game loops conditionals strings practice project 1",
+      summary: [
+        "This project combines everything from Stages 1-4: variables, strings, conditionals, and loops. You'll build a console-style guessing game where the computer picks a secret number and the player guesses until they get it right.",
+        "Work through this on your own machine using the REPL or a .py file so you can actually run and test it — remember, Python code only runs on your computer, not inside this page."
+      ],
+      goalsHeading: "What you'll build",
+      goals: [
+        "Store a secret number in a variable.",
+        "Use a while loop that keeps asking for a guess until it matches.",
+        "Use if/elif/else to tell the player \u2018too high\u2019, \u2018too low\u2019, or \u2018correct\u2019.",
+        "Count and display how many guesses it took.",
+        "(Stretch) Limit the player to 6 attempts using a counter and break."
+      ],
+      code: "secret = 17          # imagine this was chosen randomly\nguesses = 0\n\nwhile True:\n    text = input(\"Guess a number between 1 and 20: \")\n    guess = int(text)\n    guesses += 1\n\n    if guess < secret:\n        print(\"Too low, try again.\")\n    elif guess > secret:\n        print(\"Too high, try again.\")\n    else:\n        print(f\"Correct! You got it in {guesses} guesses.\")\n        break",
+      output: "(Output depends on player input — run this in a .py file and try it yourself.)",
+      practiceHeading: "Your next step",
+      practice: "Extend the starter code: add a maximum of 6 attempts, use the `random` module (Stage 9) to pick the secret number, and handle non-numeric input without crashing (you'll have the full tools for that after Stage 7).",
+      checklistHeading: "Completion checklist",
+      checklist: [
+        "Program asks for a guess and reads it with input().",
+        "Program converts the input text to an int before comparing.",
+        "Program gives \u2018higher\u2019 or \u2018lower\u2019 feedback on each wrong guess.",
+        "Program congratulates the player and shows the guess count when correct.",
+        "Program handles a player typing non-numeric text without crashing."
+      ]
+    },
+    {
+      id: "s5", type: "lesson", badge: "Stage 5 of 15",
+      title: "Lists, Tuples, Dictionaries, and Sets",
+      topics: "lists tuples dictionaries dicts sets indexing slicing collections data structures built-in methods",
+      summary: [
+        "Real programs manage groups of values, not just single ones. Python's four core built-in collections are: `list` (ordered, changeable, allows duplicates), `tuple` (ordered, unchangeable), `dict` (key \u2192 value pairs), and `set` (unordered, unique values only).",
+        "Lists and tuples support indexing (`items[0]`) and slicing (`items[1:3]`) just like strings. Negative indexes count from the end.",
+        "Dictionaries map keys to values and are ideal for looking things up by name rather than position. Sets are perfect for membership tests and removing duplicates."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Create and modify lists, tuples, dicts, and sets.",
+        "Use indexing and slicing confidently, including negative indexes.",
+        "Look up dictionary values safely with .get().",
+        "Choose the right collection type for a given problem."
+      ],
+      code: "fruits = [\"apple\", \"banana\", \"cherry\"]\nfruits.append(\"date\")              # add to the end\nprint(fruits[1:3])                 # ['banana', 'cherry']\nprint(len(fruits))                 # 4\n\npoint = (3, 4)                     # tuples are immutable (can't be changed)\nx, y = point                       # unpacking\nprint(f\"x={x}, y={y}\")\n\nstudent = {\"name\": \"Mo\", \"age\": 21, \"major\": \"CS\"}\nstudent[\"age\"] = 22                # update a value\nprint(student[\"name\"], student.get(\"gpa\", \"N/A\"))  # safe lookup with default\n\nunique_ids = {101, 102, 102, 103}\nprint(unique_ids)                  # {101, 102, 103} - duplicate removed\nprint(102 in unique_ids)           # True - fast membership test\n\nfor key, value in student.items():\n    print(f\"{key}: {value}\")",
+      output: "['banana', 'cherry']\n4\nx=3, y=4\nMo N/A\n{101, 102, 103}\nTrue\nname: Mo\nage: 22\nmajor: CS",
+      mistake: "Trying to change a tuple (`point[0] = 5`) raises a TypeError — tuples are immutable by design. Also, using `dict[key]` for a missing key raises a KeyError; use `.get(key, default)` when the key might not exist.",
+      practice: "Build a dictionary representing a recipe with keys for name, ingredients (a list), and servings. Print a formatted summary, then add one more ingredient to the list.",
+      quiz: {
+        question: "Which collection type does NOT allow duplicate values?",
+        options: ["list", "tuple", "set", "none of them restrict duplicates"],
+        correct: 2,
+        explanation: "A set automatically keeps only unique values — adding a duplicate has no effect."
+      }
+    },
+    {
+      id: "s6", type: "lesson", badge: "Stage 6 of 15",
+      title: "Functions: Parameters, Return Values, and Scope",
+      topics: "functions def parameters arguments return scope docstrings decomposition reusable code default values",
+      summary: [
+        "A function is a named, reusable block of code. Defining one with `def` lets you give it a clear name and run the same logic from many places instead of repeating yourself (the DRY principle: Don't Repeat Yourself).",
+        "Parameters are placeholders listed in the function definition; arguments are the actual values you pass in when calling it. `return` sends a value back to the caller — without it, a function returns `None`.",
+        "Every function should ideally do one clear thing (\u2018decomposition\u2019: breaking a big problem into small, well-named pieces). A docstring documents what a function does.",
+        "Scope controls where a variable is visible: a variable created inside a function is local and disappears when the function ends, while variables created outside are visible more broadly."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Define functions with parameters, default values, and return values.",
+        "Write a clear docstring for a function.",
+        "Explain the difference between local and global scope.",
+        "Break a problem into small, well-named functions."
+      ],
+      code: "def calculate_total(price: float, quantity: int, tax_rate: float = 0.08) -> float:\n    \"\"\"Return the total cost including tax. tax_rate defaults to 8%.\"\"\"\n    subtotal = price * quantity\n    return subtotal * (1 + tax_rate)\n\ntotal = calculate_total(19.99, 3)             # uses default tax_rate\ntotal_no_tax = calculate_total(19.99, 3, 0)   # overrides the default\nprint(f\"${total:.2f}\")\nprint(f\"${total_no_tax:.2f}\")\n\ndef greet(name):\n    message = f\"Hello, {name}!\"   # 'message' is local to greet()\n    return message\n\nprint(greet(\"Sam\"))\n# print(message)   # NameError: message only exists inside greet()",
+      output: "$64.77\n$59.97\nHello, Sam!",
+      mistake: "Forgetting `return` and assuming the function 'just knows' to send back the value you printed inside it — without return, calling code gets None. Also giving functions vague names like `do_stuff()` instead of something descriptive.",
+      practice: "Write a function `is_palindrome(text)` that returns True if a string reads the same forwards and backwards. Test it with 'level' and 'python'.",
+      quiz: {
+        question: "What does a function return if it has no return statement at all?",
+        options: ["0", "An empty string", "None", "It raises an error"],
+        correct: 2,
+        explanation: "If a function never hits a return statement, Python automatically returns the special value None."
+      }
+    },
+    {
+      id: "s7", type: "lesson", badge: "Stage 7 of 15",
+      title: "Errors, Exceptions, and Defensive Input Handling",
+      topics: "errors exceptions try except finally debugging input validation defensive programming traceback",
+      summary: [
+        "Errors happen. Syntax errors mean Python couldn't even understand your code; exceptions happen while a correctly-written program is running (like dividing by zero, or converting 'abc' to an int).",
+        "`try`/`except` lets you catch an exception and handle it gracefully instead of crashing. `finally` runs regardless of whether an error occurred. Catch specific exception types rather than a bare `except:` so you don't accidentally hide unrelated bugs.",
+        "Defensive input handling means validating data (especially from users or files) before trusting it — never assume `input()` returns exactly what you expect.",
+        "Debugging strategies: read the full traceback from the bottom up (it names the real error and the line it happened on), add temporary print() statements to inspect values, and isolate the smallest piece of code that reproduces the problem."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Use try/except/else/finally to handle errors gracefully.",
+        "Catch specific exception types instead of using bare except.",
+        "Validate user input in a loop until it is usable.",
+        "Read a traceback to find the real cause of a bug."
+      ],
+      code: "def safe_divide(a, b):\n    try:\n        result = a / b\n    except ZeroDivisionError:\n        print(\"Error: cannot divide by zero.\")\n        return None\n    else:\n        return result            # runs only if no exception occurred\n    finally:\n        print(\"Divide attempt finished.\")   # always runs\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))\n\nwhile True:\n    text = input(\"Enter your age: \")\n    try:\n        age = int(text)\n        if age < 0:\n            raise ValueError(\"Age cannot be negative\")\n        break\n    except ValueError as e:\n        print(f\"Invalid input ({e}). Please enter a whole number.\")\n\nprint(f\"Age accepted: {age}\")",
+      output: "Divide attempt finished.\n5.0\nDivide attempt finished.\nError: cannot divide by zero.\nNone\n(then the program keeps prompting until a valid non-negative integer is entered)",
+      mistake: "Using a bare `except:` that silently swallows every possible error, including typos in your own code, which makes bugs almost impossible to find. Always catch the specific exception you expect.",
+      practice: "Write a function `safe_int_input(prompt)` that keeps asking the user for input until they type something that converts to an int, then returns that int.",
+      quiz: {
+        question: "Why is `except:` (with no exception type) generally discouraged?",
+        options: [
+          "It's slower than except Exception",
+          "It silently catches every kind of error, including bugs you didn't anticipate, making debugging harder",
+          "It only works in Python 2",
+          "It is actually illegal syntax in Python 3"
+        ],
+        correct: 1,
+        explanation: "A bare except hides the specific kind of problem that occurred, including mistakes in your own code, which makes programs harder to debug."
+      }
+    },
+    {
+      id: "s8", type: "lesson", badge: "Stage 8 of 15",
+      title: "Files, Paths, and JSON",
+      topics: "files open context manager with json paths read write pathlib resource handling",
+      summary: [
+        "Programs often need to read from or write to files that persist after the program ends. Python's built-in `open()` function opens a file, and the `with` statement (a context manager) guarantees the file is properly closed afterward, even if an error occurs.",
+        "JSON (JavaScript Object Notation) is a lightweight, text-based format for storing structured data, and the most common format for configuration files and data exchanged between programs. Python's `json` module converts between JSON text and Python objects.",
+        "The `pathlib` module offers a modern, readable way to build and work with file paths across operating systems, instead of manually joining strings with slashes."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Open, read, and write files safely using `with`.",
+        "Save and load structured data using the json module.",
+        "Use pathlib.Path for basic path operations.",
+        "Explain why context managers prevent resource leaks."
+      ],
+      code: "import json\nfrom pathlib import Path\n\ndata = {\"name\": \"Ava\", \"scores\": [88, 92, 79]}\n\n# write JSON to a file, using 'with' so it always closes safely\nwith open(\"profile.json\", \"w\") as f:\n    json.dump(data, f, indent=2)\n\n# read it back\nwith open(\"profile.json\", \"r\") as f:\n    loaded = json.load(f)\n\nprint(loaded[\"name\"], loaded[\"scores\"])\n\npath = Path(\"profile.json\")\nprint(path.exists(), path.suffix, path.stem)",
+      output: "Ava [88, 92, 79]\nTrue .json profile",
+      mistake: "Opening a file with `open()` and forgetting to close it (or forgetting `with`) can leak resources, and for writes may mean data is never actually saved to disk. Always prefer `with open(...) as f:`.",
+      practice: "Write a script that stores a list of three favorite books as a list of dictionaries (each with 'title' and 'author'), saves it to books.json, then reads the file back and prints each title.",
+      quiz: {
+        question: "What is the main benefit of `with open(...) as f:` over manual open()/close()?",
+        options: [
+          "It makes the file open faster",
+          "The file is automatically closed even if an error happens inside the block",
+          "It converts the file to JSON automatically",
+          "There is no real difference"
+        ],
+        correct: 1,
+        explanation: "The with statement is a context manager: it guarantees cleanup code (closing the file) runs even if an exception interrupts the block."
+      }
+    },
+    {
+      id: "m2", type: "project", badge: "Milestone Project 2",
+      title: "Contact Book with File Storage",
+      topics: "milestone project contact book files json functions error handling practice project 2",
+      summary: [
+        "This project combines functions (Stage 6), error handling (Stage 7), and file/JSON storage (Stage 8) into a small command-line contact manager that remembers contacts between runs."
+      ],
+      goalsHeading: "What you'll build",
+      goals: [
+        "Store contacts as a list of dicts: {\"name\":..., \"phone\":..., \"email\":...}.",
+        "A function add_contact(contacts, name, phone, email) that appends and returns the updated list.",
+        "Functions save_contacts(contacts, filename) and load_contacts(filename) using json + with.",
+        "A menu loop (while True) letting the user add, list, search, or quit.",
+        "Loading wrapped in try/except FileNotFoundError so a first run with no file doesn't crash."
+      ],
+      code: "import json\n\ndef load_contacts(filename):\n    try:\n        with open(filename, \"r\") as f:\n            return json.load(f)\n    except FileNotFoundError:\n        return []                      # no file yet -> start empty\n\ndef save_contacts(contacts, filename):\n    with open(filename, \"w\") as f:\n        json.dump(contacts, f, indent=2)\n\ndef add_contact(contacts, name, phone, email):\n    \"\"\"Add a new contact dict and return the updated list.\"\"\"\n    contacts.append({\"name\": name, \"phone\": phone, \"email\": email})\n    return contacts",
+      output: "(This is a starting skeleton — extend it into a full menu-driven program and run it as a .py file.)",
+      practiceHeading: "Your next step",
+      practice: "Add a search_contacts(contacts, query) function that returns matches where the query appears in the name (case-insensitive), and wire up a menu loop around all the functions.",
+      checklistHeading: "Completion checklist",
+      checklist: [
+        "Contacts persist in a .json file between separate runs of the program.",
+        "Adding a contact validates that a name was actually entered.",
+        "Searching is case-insensitive.",
+        "The program never crashes on bad input — it asks again instead.",
+        "Each function has a clear docstring."
+      ]
+    },
+    {
+      id: "s9", type: "lesson", badge: "Stage 9 of 15",
+      title: "Modules, Packages, Virtual Environments, and pip",
+      topics: "imports modules packages virtual environment venv pip install dependencies standard library",
+      summary: [
+        "A module is just a .py file; a package is a folder of related modules. The standard library ships dozens of ready-made modules (like `math`, `random`, `datetime`) that you load with `import`.",
+        "You can import an entire module (`import math`), a specific name from it (`from math import sqrt`), or give it a shorter alias (`import numpy as np`, once installed).",
+        "A virtual environment is an isolated Python environment for one project, so its installed packages don't conflict with other projects. Create one with `python -m venv .venv`, then activate it before installing anything.",
+        "`pip` is Python's package installer. Inside an activated virtual environment, `pip install requests` downloads and installs a third-party package; `pip freeze > requirements.txt` records exact versions so others can reproduce your environment."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Import whole modules, specific names, and aliased modules.",
+        "Explain why virtual environments exist.",
+        "Create and activate a virtual environment.",
+        "Install a package with pip and record it in requirements.txt."
+      ],
+      code: "import math\nfrom datetime import date\nimport random\n\nprint(math.sqrt(49))                 # 7.0\nprint(math.pi)                       # 3.141592653589793\n\ntoday = date.today()\nprint(today.isoformat())             # e.g. 2024-05-01 (changes with the date)\n\nprint(random.choice([\"rock\", \"paper\", \"scissors\"]))   # one random item\nprint(random.randint(1, 6))          # a random int from 1 to 6 inclusive\n\n# Typical virtual-environment workflow (run in a terminal, not in Python):\n#   python -m venv .venv\n#   source .venv/bin/activate       (macOS/Linux)\n#   .venv\\Scripts\\activate           (Windows)\n#   pip install requests\n#   pip freeze > requirements.txt",
+      output: "7.0\n3.141592653589793\n2024-05-01 (your actual current date)\nrock (or paper/scissors, chosen randomly)\n4 (a random number 1-6)",
+      mistake: "Installing packages globally with pip instead of inside a virtual environment — this can cause version conflicts between unrelated projects, and makes projects hard to share reliably.",
+      practice: "In a terminal, create a virtual environment, activate it, and install any small package (for example, `pip install requests`). Run `pip freeze` and observe the installed package and version listed.",
+      quiz: {
+        question: "Why use a virtual environment for each project?",
+        options: [
+          "It makes Python code run faster",
+          "It keeps each project's installed packages isolated so versions don't conflict across projects",
+          "It is required to use the print() function",
+          "It automatically writes your code for you"
+        ],
+        correct: 1,
+        explanation: "Virtual environments isolate dependencies per project, preventing one project's package versions from breaking another's."
+      }
+    },
+    {
+      id: "s10", type: "lesson", badge: "Stage 10 of 15",
+      title: "Object-Oriented Programming: Classes and Objects",
+      topics: "oop classes objects instances methods inheritance composition self init constructor",
+      summary: [
+        "A class is a blueprint for creating objects that bundle data (attributes) and behavior (methods) together. An instance is one specific object built from that blueprint. You define a class with `class Name:` and typically give it an `__init__` method that runs automatically when a new instance is created.",
+        "Every method's first parameter is conventionally named `self` and refers to the specific instance the method was called on.",
+        "Inheritance lets a new class (child/subclass) reuse and extend another class (parent/superclass) — good for 'is-a' relationships. Composition builds objects out of other objects — good for 'has-a' relationships — and is often preferred because it keeps classes more loosely coupled."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Define a class with __init__ and instance methods.",
+        "Create and use multiple instances of a class.",
+        "Use inheritance with super() to extend a parent class.",
+        "Decide between inheritance (\u2018is-a\u2019) and composition (\u2018has-a\u2019)."
+      ],
+      code: "class Animal:\n    def __init__(self, name, sound):\n        self.name = name\n        self.sound = sound\n\n    def speak(self):\n        return f\"{self.name} says {self.sound}\"\n\nclass Dog(Animal):                       # Dog inherits from Animal\n    def __init__(self, name):\n        super().__init__(name, sound=\"Woof\")   # reuse the parent's setup\n\n    def fetch(self):\n        return f\"{self.name} fetches the ball!\"\n\nclass Engine:\n    def __init__(self, horsepower):\n        self.horsepower = horsepower\n\nclass Car:                               # Car HAS-A Engine (composition)\n    def __init__(self, make, engine):\n        self.make = make\n        self.engine = engine\n\n    def describe(self):\n        return f\"{self.make} with a {self.engine.horsepower}hp engine\"\n\nrex = Dog(\"Rex\")\nprint(rex.speak())\nprint(rex.fetch())\n\nmy_car = Car(\"Volt\", Engine(150))\nprint(my_car.describe())",
+      output: "Rex says Woof\nRex fetches the ball!\nVolt with a 150hp engine",
+      mistake: "Forgetting `self` as the first parameter in instance methods (causing a TypeError), or overusing deep inheritance chains when simple composition would be clearer and easier to maintain.",
+      practice: "Create a BankAccount class with __init__(self, owner, balance=0), and methods deposit(amount) and withdraw(amount) that adjust self.balance (withdraw should refuse to go negative). Create one instance and try a few deposits and withdrawals.",
+      quiz: {
+        question: "What does `self` refer to inside an instance method?",
+        options: [
+          "The class itself",
+          "The specific object (instance) the method is being called on",
+          "A global variable",
+          "The parent class only"
+        ],
+        correct: 1,
+        explanation: "self is a reference to the particular instance the method was called on, giving the method access to that instance's own attributes."
+      }
+    },
+    {
+      id: "s11", type: "lesson", badge: "Stage 11 of 15",
+      title: "Iterables, Generators, Comprehensions, Decorators & Context Managers",
+      topics: "iterables iterators generators yield comprehensions list comprehension decorators context managers advanced",
+      summary: [
+        "An iterable is anything you can loop over (lists, strings, dicts...). Under the hood, `for` asks the iterable for an iterator, then repeatedly calls `next()` on it until it's exhausted.",
+        "A generator function uses `yield` instead of `return` to produce a sequence of values lazily — one at a time, on demand — which is memory-efficient for large or infinite sequences.",
+        "Comprehensions are a compact way to build a new list, dict, or set from an iterable: `[x*2 for x in range(5)]` instead of a multi-line loop.",
+        "A decorator is a function that wraps another function to add behavior without changing its source code, using `@decorator_name` above a `def`. Context managers (the objects behind `with`) define setup/teardown logic."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Write a generator function using yield.",
+        "Write list comprehensions with optional filtering conditions.",
+        "Explain what a decorator does and apply one with @.",
+        "Recognize when a context manager is appropriate."
+      ],
+      code: "def countdown(n):\n    \"\"\"Generator: yields n, n-1, ..., 1 one at a time.\"\"\"\n    while n > 0:\n        yield n\n        n -= 1\n\nfor num in countdown(3):\n    print(num)                      # 3  2  1\n\nsquares = [x * x for x in range(6) if x % 2 == 0]\nprint(squares)                      # [0, 4, 16]\n\ndef log_calls(func):\n    \"\"\"Decorator that prints a message before calling func.\"\"\"\n    def wrapper(*args, **kwargs):\n        print(f\"Calling {func.__name__}{args}\")\n        return func(*args, **kwargs)\n    return wrapper\n\n@log_calls\ndef add(a, b):\n    return a + b\n\nprint(add(2, 3))",
+      output: "3\n2\n1\n[0, 4, 16]\nCalling add(2, 3)\n5",
+      mistake: "Confusing a generator function with a regular function that returns a list — calling `countdown(3)` does not run the body yet; it returns a generator object, and code only executes as you iterate. Also, overly complex comprehensions hurt readability — a plain loop is sometimes clearer.",
+      practice: "Write a generator function `even_numbers(limit)` that yields even numbers from 0 up to (but not including) limit. Then write a list comprehension that collects all its values into a list and print it.",
+      quiz: {
+        question: "What keyword turns a regular function into a generator function?",
+        options: ["return", "yield", "async", "lambda"],
+        correct: 1,
+        explanation: "Using yield anywhere inside a function's body makes it a generator function: calling it returns a generator object that produces values lazily."
+      }
+    },
+    {
+      id: "m3", type: "project", badge: "Milestone Project 3",
+      title: "Library Catalog System",
+      topics: "milestone project library catalog oop classes generators practice project 3",
+      summary: [
+        "This project uses classes (Stage 10) together with iterables/generators (Stage 11) to build a small library catalog that models Books and a Library that holds them."
+      ],
+      goalsHeading: "What you'll build",
+      goals: [
+        "A Book class storing title, author, and is_checked_out (bool).",
+        "A Library class with a list of Book instances and methods: add_book, check_out(title), return_book(title).",
+        "A generator method available_books() that yields only books currently not checked out.",
+        "A __str__ method on Book for clean display.",
+        "A list comprehension to count how many books are checked out."
+      ],
+      code: "class Book:\n    def __init__(self, title, author):\n        self.title = title\n        self.author = author\n        self.is_checked_out = False\n\n    def __str__(self):\n        status = \"checked out\" if self.is_checked_out else \"available\"\n        return f\"{self.title} by {self.author} ({status})\"\n\nclass Library:\n    def __init__(self):\n        self.books = []\n\n    def add_book(self, book):\n        self.books.append(book)\n\n    def available_books(self):\n        for book in self.books:\n            if not book.is_checked_out:\n                yield book",
+      output: "(Extend this skeleton with check_out/return_book methods and test it with a few Book instances.)",
+      practiceHeading: "Your next step",
+      practice: "Add check_out(title) and return_book(title) methods to Library. Have check_out print a clear message if the book is already checked out, instead of crashing.",
+      checklistHeading: "Completion checklist",
+      checklist: [
+        "Checking out an already-checked-out book prints a clear message instead of crashing.",
+        "available_books() is a generator (uses yield), not a function returning a full list.",
+        "The catalog can be printed in a readable, labeled format.",
+        "At least one custom exception or validated input is used somewhere in the system."
+      ]
+    },
+    {
+      id: "s12", type: "lesson", badge: "Stage 12 of 15",
+      title: "Type Hints, Clean Code, and Testing",
+      topics: "type hints mypy pep8 formatting unittest pytest testing version control git workflow clean code",
+      summary: [
+        "Type hints (`def add(a: int, b: int) -> int:`) document the expected types of parameters and return values. Python doesn't enforce them at runtime, but editors and tools like `mypy` use them to catch mistakes before you run your code.",
+        "Clean, maintainable code follows consistent style (PEP 8): meaningful names, small functions, consistent spacing, and comments only where logic isn't obvious. Tools like `black` (formatter) and `ruff`/`flake8` (linters) automate style checks.",
+        "Automated tests check that your code behaves correctly, and keep behaving correctly as you change it. `unittest` (built in) and `pytest` (popular third-party) both let you write small functions that assert expected results.",
+        "A healthy Git workflow means committing small, focused changes with clear messages, using branches for new features, and writing tests alongside the feature they cover."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Add type hints to function signatures.",
+        "Describe what PEP 8 and tools like black/ruff are for.",
+        "Write a basic unittest test case with assertions.",
+        "Describe a simple, healthy Git commit workflow."
+      ],
+      code: "from typing import Optional\n\ndef find_user(user_id: int, users: dict[int, str]) -> Optional[str]:\n    \"\"\"Return the username for user_id, or None if not found.\"\"\"\n    return users.get(user_id)\n\n# --- a tiny test, written the unittest way ---\nimport unittest\n\ndef add(a: int, b: int) -> int:\n    return a + b\n\nclass TestAdd(unittest.TestCase):\n    def test_add_positive_numbers(self):\n        self.assertEqual(add(2, 3), 5)\n\n    def test_add_negative_numbers(self):\n        self.assertEqual(add(-1, -1), -2)\n\n# In a real project this file would end with:\n# if __name__ == \"__main__\":\n#     unittest.main()\n# Then run it from a terminal with: python test_add.py",
+      output: "(Running `python test_add.py` would print something like:\n..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK)",
+      mistake: "Treating type hints as something that stops bad values at runtime — they don't, by themselves. `add(\"2\", \"3\")` still runs fine unless you add explicit checks or a separate type checker. Also, skipping tests until 'later' — later rarely comes, and bugs compound.",
+      practice: "Add type hints to a function you wrote earlier (e.g., calculate_total from Stage 6). Then write two unittest test methods for it: one normal case and one edge case (like quantity=0).",
+      quiz: {
+        question: "Do Python type hints prevent the program from running if the wrong type is passed?",
+        options: [
+          "Yes, Python always raises an error immediately",
+          "No, they are documentation/tooling hints; Python itself does not enforce them at runtime",
+          "Only in Python 2",
+          "Only inside classes"
+        ],
+        correct: 1,
+        explanation: "Type hints are optional annotations used by humans and external tools (like mypy); the standard interpreter does not enforce them at runtime by default."
+      }
+    },
+    {
+      id: "s13", type: "lesson", badge: "Stage 13 of 15",
+      title: "Standard Library, HTTP/APIs, and Databases",
+      topics: "standard library http apis requests json rest sql sqlite databases architecture",
+      summary: [
+        "Python's standard library is famously \u2018batteries included\u2019: modules like `collections`, `itertools`, `datetime`, `os`, and `pathlib` solve common problems without installing anything extra.",
+        "Most web services expose an HTTP API: your program sends a request (often GET to read, POST to create) to a URL, and gets back a response, frequently formatted as JSON. The third-party `requests` library (via pip) is the de-facto standard for this, though the standard library's `urllib` can do it without installs.",
+        "For storing structured data long-term, relational databases organize information into tables with rows and columns, queried with SQL. Python's built-in `sqlite3` module talks to a lightweight, file-based SQL database with no server setup.",
+        "A practical application architecture separates concerns: code that gets/stores data, code implementing business rules, and code handling user interaction, kept in separate modules/functions so each piece is easier to test and change."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Name a few useful standard-library modules and their purpose.",
+        "Describe the basic request/response model of an HTTP API.",
+        "Write a parameterized SQL query with sqlite3.",
+        "Explain why separating data, logic, and interface code helps maintainability."
+      ],
+      code: "import sqlite3\n\n# sqlite3 ships with Python - no installation needed\nconn = sqlite3.connect(\"app.db\")          # creates the file if missing\ncur = conn.cursor()\n\ncur.execute(\"\"\"\n    CREATE TABLE IF NOT EXISTS tasks (\n        id INTEGER PRIMARY KEY,\n        title TEXT NOT NULL,\n        done INTEGER DEFAULT 0\n    )\n\"\"\")\n\ncur.execute(\"INSERT INTO tasks (title) VALUES (?)\", (\"Learn SQL\",))\nconn.commit()\n\ncur.execute(\"SELECT id, title, done FROM tasks\")\nfor row in cur.fetchall():\n    print(row)\n\nconn.close()\n\n# Conceptual example of calling a web API (needs 'pip install requests'):\n# import requests\n# response = requests.get(\"https://api.example.com/users/1\")\n# if response.status_code == 200:\n#     data = response.json()\n#     print(data[\"name\"])",
+      output: "(1, 'Learn SQL', 0)",
+      mistake: "Building SQL queries with plain string concatenation (f\"SELECT * FROM users WHERE name = '{name}'\") instead of parameterized queries (`?` placeholders) — this opens the door to SQL injection. Always pass values as parameters.",
+      practice: "Extend the tasks table example: insert two more tasks, then write a SELECT query that only returns tasks where done = 0, and print the results.",
+      quiz: {
+        question: "Why use `cur.execute(\"... WHERE title = ?\", (value,))` instead of building the SQL string with an f-string?",
+        options: [
+          "It runs faster in every case",
+          "It prevents SQL injection by safely separating code from data",
+          "f-strings are not allowed with sqlite3",
+          "There is no real difference"
+        ],
+        correct: 1,
+        explanation: "Parameterized queries let the database driver treat your value strictly as data, not executable SQL, which prevents SQL injection attacks."
+      }
+    },
+    {
+      id: "s14", type: "lesson", badge: "Stage 14 of 15",
+      title: "Concurrency: Threads, Processes, and async/await",
+      topics: "concurrency threading multiprocessing async await asyncio gil parallelism",
+      summary: [
+        "Concurrency means handling multiple tasks that overlap in time; it is not automatically the same as true simultaneous execution, and the right tool depends on what is slowing your program down.",
+        "Use the `threading` module for I/O-bound work (waiting on network requests, file access) where tasks spend most of their time waiting, not computing. Python's Global Interpreter Lock (GIL) means threads don't give true CPU parallelism for pure Python code.",
+        "Use `multiprocessing` for CPU-bound work (heavy number crunching) — it runs separate processes, each with its own interpreter and memory, achieving genuine parallel execution across CPU cores.",
+        "Use `async`/`await` (via `asyncio`) for I/O-bound work when you want to manage many waiting tasks efficiently within a single thread, cooperatively switching at `await` points. These three tools are not interchangeable: pick threads or asyncio for waiting-heavy tasks, and processes for computation-heavy tasks."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Distinguish I/O-bound work from CPU-bound work.",
+        "Explain why threading doesn't speed up pure-CPU Python work due to the GIL.",
+        "Describe what asyncio.gather does conceptually.",
+        "Pick the right concurrency tool for a given scenario."
+      ],
+      code: "import asyncio\nimport time\n\nasync def fetch_data(name, delay):\n    print(f\"Start fetching {name}\")\n    await asyncio.sleep(delay)          # simulates waiting on the network\n    print(f\"Finished fetching {name}\")\n    return f\"{name}-result\"\n\nasync def main():\n    start = time.time()\n    results = await asyncio.gather(\n        fetch_data(\"A\", 2),\n        fetch_data(\"B\", 1),\n    )\n    print(results, f\"took {time.time() - start:.1f}s\")\n\n# In a script you would call: asyncio.run(main())\n# Because both tasks wait concurrently, total time is ~2s, not 3s.\n\n# --- When each tool fits ---\n# threading:       many slow network calls happening \"at once\"\n# multiprocessing: crunching a huge list of numbers across CPU cores\n# asyncio:         a server juggling thousands of waiting connections",
+      output: "Start fetching A\nStart fetching B\nFinished fetching B\nFinished fetching A\n['A-result', 'B-result'] took 2.0s",
+      mistake: "Assuming threading gives a CPU speed boost for pure-Python computation — because of the GIL, CPU-bound Python threads usually don't run faster in parallel; use multiprocessing instead. Also mixing blocking calls (like time.sleep) inside async functions, which freezes the entire event loop.",
+      practice: "Without running it, read the async example above and predict the output order and total time if fetch_data('C', 3) were added to the gather() call. Then check your reasoning.",
+      quiz: {
+        question: "Which tool is the best fit for a CPU-heavy task like crunching millions of numbers as fast as possible on a multi-core machine?",
+        options: ["threading", "multiprocessing", "asyncio", "print()"],
+        correct: 1,
+        explanation: "multiprocessing runs separate processes with separate interpreters, achieving true parallel CPU execution across cores — something threading can't do for pure-Python CPU-bound work due to the GIL."
+      }
+    },
+    {
+      id: "s15", type: "lesson", badge: "Stage 15 of 15",
+      title: "Security, Performance, Packaging, and Professional Habits",
+      topics: "security performance packaging deployment professional habits best practices",
+      summary: [
+        "Security basics: never hard-code secrets (passwords, API keys) directly in source code — use environment variables instead; validate and sanitize all external input; keep dependencies updated for security patches.",
+        "Performance: measure before optimizing (use the `timeit` module to find real bottlenecks instead of guessing); prefer built-in functions and data structures (they're implemented in optimized C); avoid unnecessary work inside loops.",
+        "Packaging/deployment: a `requirements.txt` (or `pyproject.toml`) records dependencies so others can reproduce your environment; installable tools often use a proper package structure and can be published via `pip install`.",
+        "Professional habits: write a README explaining what a project does and how to run it; commit code to version control in small, descriptive steps; read tracebacks carefully instead of guessing; search for errors methodically; and keep learning by reading other people's well-written code."
+      ],
+      goalsHeading: "Learning objectives",
+      goals: [
+        "Avoid hard-coding secrets in source code.",
+        "Measure performance with timeit before optimizing.",
+        "Explain the purpose of requirements.txt.",
+        "List at least three professional coding habits."
+      ],
+      code: "import os\nimport timeit\n\n# Security: read a secret from an environment variable, never hard-code it\napi_key = os.environ.get(\"MY_API_KEY\", \"\")\nif not api_key:\n    print(\"Warning: MY_API_KEY is not set.\")\n\n# Performance: measure before optimizing\ndef slow_sum(n):\n    total = 0\n    for i in range(n):\n        total += i\n    return total\n\ndef fast_sum(n):\n    return sum(range(n))            # built-in sum() is implemented in C\n\nt1 = timeit.timeit(lambda: slow_sum(10_000), number=100)\nt2 = timeit.timeit(lambda: fast_sum(10_000), number=100)\nprint(f\"manual loop: {t1:.4f}s, built-in sum: {t2:.4f}s\")",
+      output: "Warning: MY_API_KEY is not set.\nmanual loop: 0.0xxxs, built-in sum: 0.00xxs   (fast_sum is reliably faster)",
+      mistake: "Optimizing code based on guesses ('this loop feels slow') instead of measuring it, wasting time on parts of the program that barely affect overall speed. Also committing secrets into Git, where they remain in history even after being 'deleted' in a later commit.",
+      practice: "Write two versions of a function that builds a list of the squares of 0-9999: one using a for loop with .append(), one using a list comprehension. Time both with timeit and compare.",
+      quiz: {
+        question: "What is the recommended first step before trying to optimize slow code?",
+        options: [
+          "Rewrite everything in a different language",
+          "Measure where the time is actually being spent",
+          "Delete comments to make the file smaller",
+          "Add more print statements permanently"
+        ],
+        correct: 1,
+        explanation: "Profiling/measuring first avoids wasted effort — the slow part is often not where you'd intuitively guess."
+      }
+    },
+    {
+      id: "capstone", type: "capstone", badge: "Capstone Project",
+      title: "Personal Finance Tracker",
+      topics: "capstone final project finance tracker oop files json testing cli full application",
+      summary: [
+        "The capstone project pulls together nearly everything from the course: variables and control flow, collections, functions, error handling, files/JSON, modules, OOP, iterables/generators, type hints, and tests — with an optional SQLite backend if you want an extra challenge.",
+        "Build a command-line Personal Finance Tracker that lets a user record income and expense transactions, categorize them, and view summaries. Treat this as a real small project: plan the data model first, build incrementally, and test as you go."
+      ],
+      goalsHeading: "What you'll build",
+      goals: [
+        "A Transaction class (or dataclass) with amount, category, description, and date.",
+        "A FinanceTracker class holding a list of transactions, with add_transaction, total_for_category, and balance methods.",
+        "Persistent storage: save/load transactions as JSON (stretch goal: SQLite).",
+        "A text menu loop (add, list, summary by category, save & quit) with defensive input handling.",
+        "At least 3 unittest/pytest-style tests covering core logic.",
+        "Type hints on all function/method signatures, and docstrings on each class and method.",
+        "A short README-style summary (as a comment block) describing how to run the program."
+      ],
+      code: "from dataclasses import dataclass, field\nfrom datetime import date\n\n@dataclass\nclass Transaction:\n    amount: float          # positive = income, negative = expense\n    category: str\n    description: str = \"\"\n    on_date: date = field(default_factory=date.today)\n\nclass FinanceTracker:\n    \"\"\"Holds transactions and provides summary calculations.\"\"\"\n\n    def __init__(self) -> None:\n        self.transactions: list[Transaction] = []\n\n    def add_transaction(self, txn: Transaction) -> None:\n        self.transactions.append(txn)\n\n    def total_for_category(self, category: str) -> float:\n        return sum(t.amount for t in self.transactions if t.category == category)\n\n    def balance(self) -> float:\n        return sum(t.amount for t in self.transactions)",
+      output: "(This is a design starting point. Build the full menu, storage, and tests around it as your final project.)",
+      practiceHeading: "Your next step",
+      practice: "Add a menu loop, JSON persistence (load on start, save on quit), and three tests: one for balance() with mixed transactions, one for total_for_category() with no matches, and one for adding a transaction.",
+      checklistHeading: "Capstone completion checklist",
+      checklist: [
+        "Data persists correctly between separate runs.",
+        "Invalid numeric input is caught and re-prompted, never crashes the program.",
+        "At least one list comprehension and one generator function are used meaningfully.",
+        "Core calculation logic has passing automated tests.",
+        "Code uses clear names, small functions/methods, and consistent formatting.",
+        "No secrets or hard-coded personal data are committed if shared via version control."
+      ]
+    }
+  ];
+
+  /* ============================================================
+     STATE
+     ============================================================ */
+  var state = {
+    currentId: "overview",
+    completed: loadProgress(),
+    query: ""
+  };
+
+  /* ============================================================
+     PERSISTENCE HELPERS
+     ============================================================ */
+  function loadProgress(){
+    try{
+      var raw = window.localStorage.getItem(STORAGE_KEY);
+      if(!raw) return new Set();
+      var parsed = JSON.parse(raw);
+      if(Array.isArray(parsed)){
+        return new Set(parsed.filter(function(x){ return typeof x === "string"; }));
+      }
+      return new Set();
+    }catch(err){
+      return new Set();
+    }
+  }
+
+  function saveProgress(){
+    try{
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(state.completed)));
+    }catch(err){
+      /* storage unavailable (private mode, quota, etc.) - fail silently */
+    }
+  }
+
+  /* ============================================================
+     DOM HELPERS
+     ============================================================ */
+  function el(tag, opts, children){
+    var node = document.createElement(tag);
+    opts = opts || {};
+    if(opts.className) node.className = opts.className;
+    if(opts.text !== undefined) node.textContent = opts.text;
+    if(opts.attrs){
+      Object.keys(opts.attrs).forEach(function(k){
+        node.setAttribute(k, opts.attrs[k]);
+      });
+    }
+    if(opts.on){
+      Object.keys(opts.on).forEach(function(evt){
+        node.addEventListener(evt, opts.on[evt]);
+      });
+    }
+    (children || []).forEach(function(c){
+      if(c) node.appendChild(c);
+    });
+    return node;
+  }
+
+  function paragraphs(list, className){
+    return list.map(function(txt){ return el("p", { text: txt, className: className }); });
+  }
+
+  /* ============================================================
+     NAVIGATION RENDERING
+     ============================================================ */
+  var navList = document.getElementById("nav-list");
+  var navEmpty = document.getElementById("nav-empty");
+  var overviewBtn = document.getElementById("overview-btn");
+  var courseNav = document.getElementById("course-nav");
+  var navToggle = document.getElementById("nav-toggle");
+
+  function matchesQuery(item, q){
+    if(!q) return true;
+    var hay = (item.title + " " + item.topics).toLowerCase();
+    return hay.indexOf(q) !== -1;
+  }
+
+  function renderNav(){
+    navList.replaceChildren();
+    var q = state.query.trim().toLowerCase();
+    var visible = COURSE.filter(function(item){ return matchesQuery(item, q); });
+
+    navEmpty.hidden = visible.length !== 0;
+
+    visible.forEach(function(item){
+      var overallIndex = COURSE.indexOf(item) + 1;
+      var isActive = state.currentId === item.id;
+      var isDone = state.completed.has(item.id);
+
+      var numSpan = el("span", { className: "nav-num", text: String(overallIndex) + "." });
+      var badgeSpan = el("span", { className: "nav-badge", text: item.badge });
+      var titleSpan = el("span", { text: item.title });
+      var textWrap = el("span", { className: "nav-text" }, [badgeSpan, titleSpan]);
+      var children = [numSpan, textWrap];
+      if(isDone){
+        children.push(el("span", { className: "nav-check", attrs: { "aria-hidden": "true" }, text: "\u2713" }));
+        children.push(el("span", { className: "visually-hidden-text", attrs: { style: "position:absolute;left:-9999px;" }, text: " (completed)" }));
+      }
+
+      var btn = el("button", {
+        className: "nav-item-btn" + (isActive ? " active" : ""),
+        attrs: {
+          type: "button",
+          "aria-current": isActive ? "page" : "false"
+        },
+        on: { click: function(){ selectItem(item.id); closeMobileNav(); } }
+      }, children);
+
+      var li = el("li", {}, [btn]);
+      navList.appendChild(li);
+    });
+
+    overviewBtn.className = "overview-btn" + (state.currentId === "overview" ? " active" : "");
+    overviewBtn.setAttribute("aria-current", state.currentId === "overview" ? "page" : "false");
+  }
+
+  function closeMobileNav(){
+    courseNav.classList.remove("open");
+    navToggle.setAttribute("aria-expanded", "false");
+  }
+
+  navToggle.addEventListener("click", function(){
+    var isOpen = courseNav.classList.toggle("open");
+    navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  });
+
+  overviewBtn.addEventListener("click", function(){
+    selectItem("overview");
+    closeMobileNav();
+  });
+
+  var searchInput = document.getElementById("lesson-search");
+  searchInput.addEventListener("input", function(e){
+    state.query = e.target.value;
+    renderNav();
+  });
+
+  /* ============================================================
+     PROGRESS BAR
+     ============================================================ */
+  var progressFill = document.getElementById("progress-fill");
+  var progressBar = document.getElementById("progress-bar");
+  var progressLabel = document.getElementById("progress-label");
+
+  function updateProgressUI(){
+    var total = COURSE.length;
+    var done = 0;
+    COURSE.forEach(function(item){ if(state.completed.has(item.id)) done++; });
+    var percent = total === 0 ? 0 : Math.round((done / total) * 100);
+    progressFill.style.width = percent + "%";
+    progressBar.setAttribute("aria-valuenow", String(percent));
+    progressLabel.textContent = done + " of " + total + " steps complete (" + percent + "%)";
+  }
+
+  document.getElementById("reset-progress").addEventListener("click", function(){
+    var ok = window.confirm("Reset all saved progress? This cannot be undone.");
+    if(!ok) return;
+    state.completed = new Set();
+    saveProgress();
+    updateProgressUI();
+    renderNav();
+    renderMain();
+  });
+
+  /* ============================================================
+     MAIN CONTENT RENDERING
+     ============================================================ */
+  var mainContent = document.getElementById("main-content");
+
+  function selectItem(id){
+    state.currentId = id;
+    renderNav();
+    renderMain();
+    mainContent.focus();
+  }
+
+  function renderMain(){
+    mainContent.replaceChildren();
+    if(state.currentId === "overview"){
+      mainContent.appendChild(buildOverview());
+    } else {
+      var item = COURSE.filter(function(c){ return c.id === state.currentId; })[0];
+      if(!item){
+        state.currentId = "overview";
+        mainContent.appendChild(buildOverview());
+        return;
+      }
+      mainContent.appendChild(buildLesson(item));
+    }
+  }
+
+  function buildOverview(){
+    var frag = document.createDocumentFragment();
+
+    frag.appendChild(el("span", { className: "lesson-badge", text: "Start here" }));
+    frag.appendChild(el("h2", { className: "lesson-title", text: "Course Overview" }));
+
+    var introWrap = el("div", { className: "overview-intro" }, paragraphs([
+      "Welcome! This course takes you from writing your very first line of Python to practicing the habits professional developers rely on every day: clean code, testing, error handling, and thoughtful architecture.",
+      "Lessons are short and build on each other in order. Each one includes a plain-language explanation, a runnable example with expected output, a common mistake to watch for, a short practice task, and often a quick knowledge check. Three milestone projects and one larger capstone project let you apply what you've learned to something real.",
+      "Remember: Python code shown on this page is instructional. To actually run it, install Python on your computer (see Stage 1) and use a code editor or the REPL — Python does not run inside this web page."
+    ]));
+    frag.appendChild(introWrap);
+
+    var how = el("div", { className: "how-it-works" }, [
+      el("h3", { text: "How this course works" }),
+      el("ul", {}, [
+        el("li", { text: "Use the navigation list (or search box) to jump to any lesson, anytime, without losing your progress." }),
+        el("li", { text: "Each lesson has Previous/Next buttons so you can also move through the course in order." }),
+        el("li", { text: "Mark a lesson complete when you've understood it and tried the practice task — your progress is saved in this browser." }),
+        el("li", { text: "Knowledge checks give immediate feedback with an explanation, so you can learn from mistakes right away." })
+      ])
+    ]);
+    frag.appendChild(how);
+
+    frag.appendChild(el("h3", { text: "Your ordered learning path" }));
+    var pathList = el("ol", { className: "path-list" });
+    COURSE.forEach(function(item, idx){
+      var btn = el("button", { type: "button", text: item.title }, []);
+      btn.setAttribute("type", "button");
+      btn.addEventListener("click", function(){ selectItem(item.id); });
+      var numBadge = el("span", { className: "path-num", text: String(idx + 1) });
+      var sub = el("span", { className: "nav-badge", text: item.badge });
+      var textCol = el("span", { className: "nav-text" }, [sub, btn]);
+      pathList.appendChild(el("li", { className: "path-item" }, [numBadge, textCol]));
+    });
+    frag.appendChild(pathList);
+
+    var startBtn = el("button", {
+      className: "btn-primary start-btn",
+      attrs: { type: "button" },
+      text: "Start Course: " + COURSE[0].title,
+      on: { click: function(){ selectItem(COURSE[0].id); } }
+    });
+    frag.appendChild(startBtn);
+
+    return frag;
+  }
+
+  function buildLesson(item){
+    var frag = document.createDocumentFragment();
+
+    frag.appendChild(el("span", { className: "lesson-badge", text: item.badge }));
+    frag.appendChild(el("h2", { className: "lesson-title", text: item.title }));
+
+    frag.appendChild(el("div", { className: "lesson-section" }, paragraphs(item.summary)));
+
+    if(item.goals && item.goals.length){
+      var ul = el("ul", {}, item.goals.map(function(g){ return el("li", { text: g }); }));
+      frag.appendChild(el("div", { className: "lesson-section" }, [
+        el("h3", { text: item.goalsHeading || "Learning objectives" }),
+        ul
+      ]));
+    }
+
+    if(item.code){
+      frag.appendChild(el("div", { className: "lesson-section" }, [
+        el("h3", { text: "Example" }),
+        buildCodeBlock(item.code)
+      ]));
+    }
+
+    if(item.output){
+      frag.appendChild(el("div", { className: "lesson-section" }, [
+        el("h3", { text: "Expected output" }),
+        el("pre", { className: "output-pre", text: item.output })
+      ]));
+    }
+
+    if(item.mistake){
+      frag.appendChild(el("div", { className: "lesson-section" }, [
+        el("div", { className: "callout callout-mistake" }, [
+          el("span", { className: "callout-icon", attrs: { "aria-hidden": "true" }, text: "\u26A0" }),
+          el("div", {}, [
+            el("h4", { text: "Common mistake" }),
+            el("p", { text: item.mistake })
+          ])
+        ])
+      ]));
+    }
+
+    if(item.practice){
+      frag.appendChild(el("div", { className: "lesson-section" }, [
+        el("div", { className: "callout callout-practice" }, [
+          el("span", { className: "callout-icon", attrs: { "aria-hidden": "true" }, text: "\uD83D\uDCDD" }),
+          el("div", {}, [
+            el("h4", { text: item.practiceHeading || "Try it yourself" }),
+            el("p", { text: item.practice })
+          ])
+        ])
+      ]));
+    }
+
+    if(item.checklist && item.checklist.length){
+      var cl = el("ul", {}, item.checklist.map(function(c){ return el("li", { text: c }); }));
+      frag.appendChild(el("div", { className: "lesson-section" }, [
+        el("h3", { text: item.checklistHeading || "Completion checklist" }),
+        cl
+      ]));
+    }
+
+    if(item.quiz){
+      frag.appendChild(el("div", { className: "lesson-section" }, [ buildQuiz(item) ]));
+    }
+
+    frag.appendChild(buildCompleteRow(item));
+    frag.appendChild(buildLessonNav(item));
+
+    return frag;
+  }
+
+  function buildCodeBlock(code){
+    var statusP = el("p", { className: "copy-status", attrs: { role: "status" } });
+    var copyBtn = el("button", {
+      className: "copy-btn",
+      attrs: { type: "button" },
+      text: "Copy code",
+      on: { click: function(){ copyCode(code, statusP, copyBtn); } }
+    });
+    var toolbar = el("div", { className: "code-toolbar" }, [
+      el("span", { text: "Python" }),
+      copyBtn
+    ]);
+    var codeEl = el("code", { text: code });
+    var pre = el("pre", {}, [codeEl]);
+    return el("div", { className: "code-block" }, [toolbar, pre, statusP]);
+  }
+
+  function copyCode(code, statusP, btn){
+    function showStatus(msg){
+      statusP.textContent = msg;
+      window.setTimeout(function(){
+        if(statusP.textContent === msg) statusP.textContent = "";
+      }, 2500);
+    }
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(code).then(function(){
+        showStatus("Copied to clipboard!");
+      }).catch(function(){
+        fallbackCopy();
+      });
+    } else {
+      fallbackCopy();
+    }
+
+    function fallbackCopy(){
+      try{
+        var textarea = document.createElement("textarea");
+        textarea.value = code;
+        textarea.setAttribute("readonly", "");
+        textarea.style.position = "absolute";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        var ok = document.execCommand && document.execCommand("copy");
+        document.body.removeChild(textarea);
+        showStatus(ok ? "Copied to clipboard!" : "Copy isn't available in this browser — please select the code manually.");
+      }catch(err){
+        showStatus("Copy isn't available in this browser — please select the code manually.");
+      }
+    }
+  }
+
+  function buildQuiz(item){
+    var quiz = item.quiz;
+    var groupName = "quiz-" + item.id;
+    var radios = [];
+
+    var optionNodes = quiz.options.map(function(optText, idx){
+      var inputId = groupName + "-opt" + idx;
+      var input = el("input", { attrs: { type: "radio", name: groupName, id: inputId, value: String(idx) } });
+      radios.push(input);
+      var label = el("label", { attrs: { "for": inputId }, text: optText });
+      return el("div", { className: "quiz-option" }, [input, label]);
+    });
+
+    var feedback = el("p", { className: "quiz-feedback", attrs: { role: "status" } });
+
+    var tryAgainBtn = el("button", {
+      className: "btn-secondary",
+      attrs: { type: "button", hidden: "hidden" },
+      text: "Try again"
+    });
+
+    var checkBtn = el("button", {
+      className: "btn-primary",
+      attrs: { type: "button" },
+      text: "Check answer"
+    });
+
+    checkBtn.addEventListener("click", function(){
+      var selected = radios.filter(function(r){ return r.checked; })[0];
+      if(!selected){
+        feedback.className = "quiz-feedback show";
+        feedback.textContent = "Please select an answer first.";
+        return;
+      }
+      var chosenIndex = parseInt(selected.value, 10);
+      var isCorrect = chosenIndex === quiz.correct;
+
+      feedback.replaceChildren();
+      var lead = document.createElement("strong");
+      lead.textContent = isCorrect ? "\u2713 Correct! " : "\u2717 Not quite. ";
+      feedback.appendChild(lead);
+      var explain = el("span", { className: "fb-explain", text: quiz.explanation });
+      feedback.appendChild(explain);
+      feedback.className = "quiz-feedback show " + (isCorrect ? "correct" : "incorrect");
+
+      radios.forEach(function(r){ r.disabled = true; });
+      checkBtn.setAttribute("hidden", "hidden");
+      tryAgainBtn.removeAttribute("hidden");
+    });
+
+    tryAgainBtn.addEventListener("click", function(){
+      radios.forEach(function(r){ r.disabled = false; r.checked = false; });
+      feedback.className = "quiz-feedback";
+      feedback.replaceChildren();
+      checkBtn.removeAttribute("hidden");
+      tryAgainBtn.setAttribute("hidden", "hidden");
+    });
+
+    var fieldset = el("fieldset", {}, [
+      el("legend", { text: quiz.question })
+    ].concat(optionNodes));
+
+    var actions = el("div", { className: "quiz-actions" }, [checkBtn, tryAgainBtn]);
+
+    return el("section", { className: "quiz", attrs: { "aria-label": "Knowledge check" } }, [
+      el("h3", { text: "Knowledge check" }),
+      fieldset,
+      actions,
+      feedback
+    ]);
+  }
+
+  function buildCompleteRow(item){
+    var checkboxId = "complete-" + item.id;
+    var isDone = state.completed.has(item.id);
+    var checkbox = el("input", {
+      attrs: { type: "checkbox", id: checkboxId }
+    });
+    checkbox.checked = isDone;
+    checkbox.addEventListener("change", function(){
+      if(checkbox.checked){
+        state.completed.add(item.id);
+      } else {
+        state.completed.delete(item.id);
+      }
+      saveProgress();
+      updateProgressUI();
+      renderNav();
+    });
+    var label = el("label", { attrs: { "for": checkboxId }, text: "Mark this " + (item.type === "lesson" ? "lesson" : "project") + " as complete" });
+    return el("div", { className: "complete-row" }, [checkbox, label]);
+  }
+
+  function buildLessonNav(item){
+    var index = COURSE.indexOf(item);
+    var prevItem = index > 0 ? COURSE[index - 1] : null;
+    var nextItem = index < COURSE.length - 1 ? COURSE[index + 1] : null;
+
+    var prevBtn = el("button", {
+      className: "prev-btn",
+      attrs: { type: "button" },
+      text: prevItem ? ("\u2190 Previous: " + prevItem.title) : "\u2190 Back to Course Overview"
+    });
+    prevBtn.addEventListener("click", function(){
+      selectItem(prevItem ? prevItem.id : "overview");
+    });
+
+    var nextBtn = el("button", {
+      className: "next-btn",
+      attrs: { type: "button" },
+      text: nextItem ? ("Next: " + nextItem.title + " \u2192") : "\uD83C\uDF89 You've reached the end!"
+    });
+    if(!nextItem){
+      nextBtn.disabled = true;
+    } else {
+      nextBtn.addEventListener("click", function(){ selectItem(nextItem.id); });
+    }
+
+    return el("div", { className: "lesson-nav" }, [prevBtn, nextBtn]);
+  }
+
+  /* ============================================================
+     INIT
+     ============================================================ */
+  function init(){
+    renderNav();
+    renderMain();
+    updateProgressUI();
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
